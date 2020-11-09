@@ -1,7 +1,6 @@
 import numpy as np
 import math as ma
 import mysql.connector
-import time
 
 def findD(RSSI):
     Pl_d = 20.5 - RSSI
