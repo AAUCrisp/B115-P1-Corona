@@ -1,11 +1,14 @@
+#ifndef STRUCTS_H
+#define STRUCTS_H
 #define MAX_DEVICES 10
 
 struct Device {
-    int rssi;
-    byte dev_mac[6];
+  int rssi;
+  char dev_mac[6];
 };
 
 struct DevicePacket {
-    byte sens_mac[6];
-    struct Device devices[MAX_DEVICES];
+  char sens_mac[6];
+  struct Device devices[MAX_DEVICES];
 };
+#endif
