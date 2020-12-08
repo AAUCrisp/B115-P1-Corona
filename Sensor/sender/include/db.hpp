@@ -11,6 +11,7 @@
 void dbInit(struct DevicePacket *packet);
 void dbSendDevices(struct DevicePacket *packet);
 void dbSendSelf(struct DevicePacket *packet);
+void dbSendDevice(struct Device *device);
 
 /* bool functions */
 bool dbCheckSelf();
@@ -109,6 +110,28 @@ bool dbCheckDevice(struct Device *device) {
 }
 
 /*
+ * Info: Function for inserting device into database
+ * Params: struct Device *device
+ */
+void dbSendDevice(struct Device *device) {
+  /* MySQL Cursor */
+  MySQL_Cursor *cur_mem = new MySQL_Cursor(&conn);
+
+  /* SQL statement */
+  const char SQL_STATE[] =
+      "INSERT INTO devices (id) VALUES ('%X:%X:%X:%X:%X:%X')";
+  char query[128];
+
+  sprintf(query, SQL_STATE,
+          /* Sensor MAC */
+          device->dev_mac[0], device->dev_mac[1], device->dev_mac[2],
+          device->dev_mac[3], device->dev_mac[4], device->dev_mac[5]);
+
+  cur_mem->execute(query);
+  delete cur_mem;
+}
+
+/*
  * Info: Function for inserting devices into database
  * Params: struct DevicePacket *packet
  */
@@ -140,6 +163,7 @@ void dbSendDevices(struct DevicePacket *packet) {
 
         cur_mem->execute(query);
       } else {
+        dbSendDevice(&packet->devices[i]);
         sprintf(query, SQL_INSERT, packet->devices[i].rssi,
                 /* Sensor MAC */
                 packet->sens_mac[0], packet->sens_mac[1], packet->sens_mac[2],
