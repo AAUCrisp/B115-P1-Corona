@@ -4,11 +4,11 @@
 
 struct Device {
   int rssi;
-  char dev_mac[6];
+  unsigned char dev_mac[6];
 };
 
 struct DevicePacket {
-  char sens_mac[6];
+  unsigned char sens_mac[6];
   struct Device devices[MAX_DEVICES];
 };
 #endif

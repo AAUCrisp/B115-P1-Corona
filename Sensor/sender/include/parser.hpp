@@ -3,10 +3,11 @@
 
 /* Includes */
 #include "structs.h"
+#include <Arduino.h>
 #include <WiFi.h>
 
 /* Prototypes */
-struct DevicePacket parse(char *buffer);
+struct DevicePacket parse();
 
 //============
 // Functions
@@ -17,21 +18,17 @@ struct DevicePacket parse() {
 
   char buffer[255];
 
-  char terminator = "\n";
+  char terminator = 0x0a;
 
   for (int i = 0; i < MAX_DEVICES; i++) {
     struct Device dev;
-    buffer = Serial.readStringUntil(terminator);
+    Serial.readBytesUntil(terminator, buffer, 64);
     int rssi;
-    char mac[6];
 
-    sscanf(buffer, "%i %X %X %X %X %X %X", rssi, mac[0], mac[1], mac[2], mac[3],
-           mac[4], mac[5]);
+    sscanf(buffer, "%i %X %X %X %X %X %X", rssi, dev.dev_mac[0], dev.dev_mac[1],
+           dev.dev_mac[2], dev.dev_mac[3], dev.dev_mac[4], dev.dev_mac[5]);
 
     dev.rssi = rssi;
-    for (int i = 0; i < 6; i++) {
-      dev.dev_mac[i] = mac[i];
-    }
     packet.devices[i] = dev;
   }
 
