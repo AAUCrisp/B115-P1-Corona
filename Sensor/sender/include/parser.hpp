@@ -25,8 +25,9 @@ struct DevicePacket parse() {
     Serial.readBytesUntil(terminator, buffer, 64);
     int rssi;
 
-    sscanf(buffer, "%X %X %X %X %X %X %i", rssi, dev.dev_mac[0], dev.dev_mac[1],
-           dev.dev_mac[2], dev.dev_mac[3], dev.dev_mac[4], dev.dev_mac[5]);
+    sscanf(buffer, "%X %X %X %X %X %X %i", dev.dev_mac[0], dev.dev_mac[1],
+           dev.dev_mac[2], dev.dev_mac[3], dev.dev_mac[4], dev.dev_mac[5],
+           rssi);
 
     dev.rssi = rssi;
     packet.devices[i] = dev;
