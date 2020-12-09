@@ -24,7 +24,7 @@ struct DevicePacket parse() {
     struct Device dev;
     buffer = Serial.readStringUntil(terminator);
 
-    const char c * = buffer.c_str();
+    const char *c = buffer.c_str();
 
     int rssi;
 
