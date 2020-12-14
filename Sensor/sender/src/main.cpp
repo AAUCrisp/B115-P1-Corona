@@ -1,42 +1,54 @@
-#include "db2.h"
 #include "parser.hpp"
 #include "structs.h"
 #include <Arduino.h>
 #include <WiFi.h>
 
-/* Connection stuff */
-// const char *ssid = "B115-Test-Net";
-// const char *pass = "hygeRMitYWCa";
+// Prototypes
+void checkSelf();
+void sendSelf();
+void checkDevice();
+void sendDevice();
 
-/* HOME TEST CONNECTION */
-const char *ssid = "HyggeHytten";
-const char *pass = "9B523D55E444";
+/* Variables */
+char ssid[] = "B115-Test-Net";
+char password[] = "hygeRMitYWCa";
+unsigned char mac[6];
+IPAddress server_addr(192, 168, 12, 1);
+WiFiClient client;
 
-DBManager dbman;
-
-void setup() {
-  Serial.begin(115200);
-  WiFi.begin(ssid, pass);
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.println("Connecting to TEST NET");
-  }
-
-  if (WiFi.status() == WL_CONNECTED) {
-    Serial.println("Connected to TEST NET");
-  }
-  dbman.connect();
-  struct Device test;
-  test.rssi = -30;
-
-  for (int i = 0; i < 6; i++)
-    test.dev_mac[i] = 0xAA;
-
-  // dbman.checkDevice(test);
-  dbman.insertDevice(test);
-
-  // dbman.sendDevice(test);
-}
+void setup() { WiFi.macAddress(mac); }
 
 void loop() {}
+
+void sendSelf() {
+  char req[] = "GET /api/sensor?mac=%02X:%02X:%02X:%02X:%02X:%02X HTTP/1.1\n"
+               "User-Agent: ArduinoWiFi/1.1\n"
+               "Connection: close\n";
+
+  char buf[255];
+
+  sprintf(buf, req, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+
+  if (client.connect(server_addr, 80)) {
+    client.println(buf);
+  }
+}
+
+void sendDevice(struct Device dev) {
+  char req[] = "GET "
+               "/api/"
+               "device?sens_mac=%02X:%02X:%02X:%02X:%02X:%02X&dev_mac=%02X:%"
+               "02X:%02X:%02X:%02X:%02X&rssi=%i HTTP/1.1\n"
+               "User-Agent: ArduinoWiFi/1.1\n"
+               "Connection: close\n";
+
+  char buf[255];
+
+  sprintf(buf, req, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
+          dev.dev_mac[0], dev.dev_mac[1], dev.dev_mac[2], dev.dev_mac[3],
+          dev.dev_mac[4], dev.dev_mac[5], dev.rssi);
+
+  if (client.connect(server_addr, 80)) {
+    client.println(buf);
+  }
+}
