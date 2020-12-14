@@ -7,36 +7,42 @@
 #include <WiFi.h>
 
 /* Prototypes */
-struct DevicePacket parse();
+// struct Device parse();
 
 //============
 // Functions
 //============
-struct DevicePacket parse() {
-  struct DevicePacket packet;
-  WiFi.macAddress(packet.sens_mac);
+//
+
+struct Device parse_sec() {
+  struct Device dev;
+  String buffer;
+
+  char terminator = 0x0a;
+
+  buffer = Serial.readStringUntil(terminator);
+
+  const char *c = buffer.c_str();
+
+  sscanf(c, "%02X %02X %02X %02X %02X %02X %i", dev.dev_mac[0], dev.dev_mac[1],
+         dev.dev_mac[2], dev.dev_mac[3], dev.dev_mac[4], dev.dev_mac[5],
+         dev.rssi);
+
+  return dev;
+}
+void parse(struct Device *dev) {
 
   String buffer;
 
   char terminator = 0x0a;
 
-  for (int i = 0; i < MAX_DEVICES; i++) {
-    struct Device dev;
-    buffer = Serial.readStringUntil(terminator);
+  buffer = Serial.readStringUntil(terminator);
 
-    const char *c = buffer.c_str();
+  const char *c = buffer.c_str();
 
-    int rssi;
-
-    sscanf(c, "%X %X %X %X %X %X %i", dev.dev_mac[0], dev.dev_mac[1],
-           dev.dev_mac[2], dev.dev_mac[3], dev.dev_mac[4], dev.dev_mac[5],
-           rssi);
-
-    dev.rssi = rssi;
-    packet.devices[i] = dev;
-  }
-
-  return packet;
+  sscanf(c, "%02X %02X %02X %02X %02X %02X %i", &dev->dev_mac[0],
+         &dev->dev_mac[1], &dev->dev_mac[2], &dev->dev_mac[3], &dev->dev_mac[4],
+         &dev->dev_mac[5], &dev->rssi);
 }
 
 #endif

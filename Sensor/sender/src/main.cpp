@@ -4,10 +4,8 @@
 #include <WiFi.h>
 
 // Prototypes
-void checkSelf();
-void sendSelf();
-void checkDevice();
-void sendDevice();
+bool sendSelf();
+bool sendDevice(struct Device dev);
 
 /* Variables */
 char ssid[] = "B115-Test-Net";
@@ -15,13 +13,35 @@ char password[] = "hygeRMitYWCa";
 unsigned char mac[6];
 IPAddress server_addr(192, 168, 12, 1);
 WiFiClient client;
+int status = WL_IDLE_STATUS;
 
-void setup() { WiFi.macAddress(mac); }
+void setup() {
+  WiFi.macAddress(mac);
+  Serial.begin(115200);
+  while (status != WL_CONNECTED) {
+    Serial.println("Connecting to network");
+    status = WiFi.begin(ssid, password);
+    delay(500);
+  }
 
-void loop() {}
+  while (!sendSelf()) {
+  }
+}
 
-void sendSelf() {
-  char req[] = "GET /api/sensor?mac=%02X:%02X:%02X:%02X:%02X:%02X HTTP/1.1\n"
+void loop() {
+  struct Device device;
+  parse(&device);
+
+  // device = parse_sec();
+
+  if (device.rssi != 0) {
+    sendDevice(device);
+  }
+}
+
+bool sendSelf() {
+  client.stop();
+  char req[] = "GET /api?anchor=%02X:%02X:%02X:%02X:%02X:%02X HTTP/1.1\n"
                "User-Agent: ArduinoWiFi/1.1\n"
                "Connection: close\n";
 
@@ -31,13 +51,19 @@ void sendSelf() {
 
   if (client.connect(server_addr, 80)) {
     client.println(buf);
+    Serial.println("Sensor sent");
+    return true;
+  } else {
+    return false;
   }
 }
 
-void sendDevice(struct Device dev) {
+bool sendDevice(struct Device dev) {
+  client.stop();
+
   char req[] = "GET "
-               "/api/"
-               "device?sens_mac=%02X:%02X:%02X:%02X:%02X:%02X&dev_mac=%02X:%"
+               "/api"
+               "?anchor=%02X:%02X:%02X:%02X:%02X:%02X&dev_mac=%02X:%"
                "02X:%02X:%02X:%02X:%02X&rssi=%i HTTP/1.1\n"
                "User-Agent: ArduinoWiFi/1.1\n"
                "Connection: close\n";
@@ -50,5 +76,9 @@ void sendDevice(struct Device dev) {
 
   if (client.connect(server_addr, 80)) {
     client.println(buf);
+    Serial.println("Device sent");
+    return true;
+  } else {
+    return false;
   }
 }

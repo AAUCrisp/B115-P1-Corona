@@ -4,7 +4,7 @@
 
 struct Device {
   int rssi;
-  unsigned char dev_mac[6];
+  unsigned int dev_mac[6];
 };
 
 struct DevicePacket {
