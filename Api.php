@@ -1,6 +1,6 @@
 <?php  // Require the file, that makes the connection to the database
 require_once 'database.php';
-
+require_once 'php_helper.php';
 echo "FED PIK";
 
 // Check if the GET variables are set in the URL, and make normal variables with them.
@@ -27,6 +27,7 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
   if (mysqli_num_rows($result)) {
     echo "<br> FUNDET TING! <br>";
 
+    var_dump(php_helper::in_multi_array($anc, $fetch));
     // Make sure the device has already been seen from that anchor too
     if (in_array($anc, $fetch)) {
       echo "<br> OPDATER ANKER! <br>";
