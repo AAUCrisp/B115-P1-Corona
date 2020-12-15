@@ -25,14 +25,18 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
 
   // If the device has already been seen
   if (mysqli_num_rows($result)) {
+    echo "<br> FUNDET TING! <br>";
+
     // Make sure the device has already been seen from that anchor too
     if (in_array($anc, $fetch['anc_id'])) {
+      echo "<br> OPDATER ANKER! <br>";
       $sql = "UPDATE anchor_device
       SET RSSI = '$rssi'
       WHERE anc_id='$anc' AND device_id = '$dev'";
     }
     // If first time from this anchor, insert instead of update
     else {
+      echo "<br> NYT ANKER! <br>";
       $sql = "INSERT INTO anchor_device (anc_id, device_id, RSSI)
               VALUES ('$anc', '$dev', $rssi)";
     }
@@ -40,6 +44,7 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
   // Otherwise insert newly seen device in database
   else {
 
+    echo "<br> NY ENHED! <br>";
     $sql = "INSERT INTO device (id)
             VALUES ('$dev')";
 
