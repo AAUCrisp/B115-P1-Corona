@@ -18,10 +18,10 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
   $result = mysqli_query($conn, $sql);
 
   var_dump($result);
-  $fetch = mysqli_fetch_assoc($result);
-  echo "Før DB Kald";
+  $fetch = mysqli_fetch_array($result);
+  echo "<br> Før DB Kald";
   var_dump($fetch);
-  echo "Efter DB Kald";
+  echo "Efter DB Kald <br>";
 
   // If the device has already been seen
   if (mysqli_num_rows($result)) {
