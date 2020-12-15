@@ -17,7 +17,7 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
         som tilføjes til databasen kommer op på websitet. det der står i script tagget er javascript
         da html blot er et "skrive-redskab", kan det ikke anvendes til at skrive kode, som funktioner
         variabler, statements. alt dette skal gøres i PHP eller Javascript. script tag anvendes når
-        man vil skrive i javascript-->
+        man vil skrive i javascript -->
         <script>
         function timedRefresh(timeoutPeriod) {
             setTimeout("location.reload(true);", timeoutPeriod);
@@ -62,7 +62,7 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
             on = angiver hvilke kolonner som skal slås sammen.  -->
 
             <?php
-                $sql = "SELECT DISTINCT device.id AS hamster, device.Last_updated , position.x, position.y
+                $sql = "SELECT DISTINCT device.id AS device_id, device.Last_updated , position.x, position.y
                         FROM device
                         JOIN anchor_device
                         ON anchor_device.device_id = device.id
@@ -113,7 +113,7 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
                         while ($row = mysqli_fetch_assoc($result)){
                             echo "<tr>";
                             echo "<br>";
-                            echo"<td> $row[device.id]</td>";
+                            echo"<td> $row[device_id]</td>";
                             echo"<td> $row[Last_updated]</td>";
                             echo"<td> $row[x]</td>";
                             echo"<td> $row[y]</td>";
