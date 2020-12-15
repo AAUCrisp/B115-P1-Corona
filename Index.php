@@ -62,7 +62,7 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
             on = angiver hvilke kolonner som skal slås sammen.  -->
 
             <?php
-                $sql = "SELECT DISTINCT device.id AS hamster, device.Last_updated , position.x, position.y
+                $sql = "SELECT DISTINCT device.id AS device_id, device.Last_updated , position.x, position.y
                         FROM device
                         JOIN anchor_device
                         ON anchor_device.device_id = device.id
@@ -112,7 +112,7 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
                             echo "<tr>";
                             echo "<br>";
                             echo"<td> $row[device_id]</td>";
-                            echo"<td> $row[last_updated]</td>";
+                            echo"<td> $row[Last_updated]</td>";
                             echo"<td> $row[x]</td>";
                             echo"<td> $row[y]</td>";
                             echo "</tr>";
