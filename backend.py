@@ -74,7 +74,7 @@ def program():
             if counter == 3:
                 c = findPosition(rssiArray[0], rssiArray[1], rssiArray[2], rssiArray[3])
                 val = (c[0], c[1], c[2], c[1], c[2])
-                mycursor.execute("INSERT INTO position (id, x, y) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE x=%s, y=%s", val)
+                mycursor.execute("INSERT INTO position (id, x, y) VALUES ('{fid}', {x}, {y}) ON DUPLICATE KEY UPDATE x={x}, y={y}".format(fid = c[0],x = c[1], y = c[2]))
                 mydb.commit()
                 rssiArray = [0, 0, 0, 0]
                 counter = 0
