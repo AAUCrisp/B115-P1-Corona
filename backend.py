@@ -46,8 +46,7 @@ def findPosition(id, RSSI1, RSSI2, RSSI3):
 def program():
     # Connect to MySQL database. Copied from https://www.w3schools.com/python/python_mysql_getstarted.asp
     mydb = mysql.connector.connect(
-        # host="192.168.12.1",
-        host="198.168.1.170",
+        host="localhost",
         user="back-end",
         password="heidiIsaHoe",
         database="maindb")
