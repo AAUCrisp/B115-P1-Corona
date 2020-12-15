@@ -50,7 +50,7 @@ def program():
         user="back-end",
         password="heidiIsaHoe",
         database="maindb")
-    mycursor = mydb.cursor(dictionary=True)
+    mycursor = mydb.cursor()
     mycursor.execute("SELECT device_id, anc_id , RSSI FROM anchor_device ORDER BY device_id")
     myresult = mycursor.fetchall()
 
@@ -60,26 +60,22 @@ def program():
     # Create counter
     counter = 0
 
-    for res in myresult:
-        dev_id = res['device_id']
-        if dev_id == res['device_id']:
-            print(res)
 
             
 
-    # For x in myresult:
-    #     dev_id = x[0]
-    #     if dev_id == x[0]:
-    #         anc_id = int(x[1])
-    #         rssiArray[anc_id] = x[2]
-    #         counter += 1
-    #         rssiArray[0] = int(x[0])
-    #         if counter == 3:
-    #             c = findPosition(rssiArray[0], rssiArray[1], rssiArray[2], rssiArray[3])
-    #             val = (c[0], c[1], c[2], c[1], c[2])
-    #             mycursor.execute("INSERT INTO position (id, x, y) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE x=%s, y=%s", val)
-    #             mydb.commit()
-    #             rssiArray = [0, 0, 0, 0]
-    #             counter = 0
+    for x in myresult:
+        dev_id = x[0]
+        if dev_id == x[0]:
+            anc_id = x[1]
+            rssiArray[1] = x[2]
+            counter += 1
+            rssiArray[0] = x[0]
+            if counter == 3:
+                c = findPosition(rssiArray[0], rssiArray[1], rssiArray[2], rssiArray[3])
+                val = (c[0], c[1], c[2], c[1], c[2])
+                mycursor.execute("INSERT INTO position (id, x, y) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE x=%s, y=%s", val)
+                mydb.commit()
+                rssiArray = [0, 0, 0, 0]
+                counter = 0
 
 program()
