@@ -16,12 +16,14 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
 
   $result = mysqli_query($conn, $sql);
 
+  var_dump($result);
+  $fetch = mysqli_fetch_assoc($result);
+  echo "Før DB Kald";
+  var_dump($fetch);
+  echo "Efter DB Kald";
+
   // If the device has already been seen
   if (mysqli_num_rows($result)) {
-    $fetch = mysqli_fetch_assoc($result);
-    echo "Før DB Kald";
-    var_dump($fetch);
-    echo "Efter DB Kald";
     // Make sure the device has already been seen from that anchor too
     if (in_array($anc, $fetch['anc_id'])) {
       $sql = "UPDATE anchor_device
