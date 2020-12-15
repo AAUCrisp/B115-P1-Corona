@@ -1,5 +1,5 @@
 <?php  // Require the file, that makes the connection to the database
-require_once 'Database.php';
+require_once 'database.php';
 
 // Check if the GET variables are set in the URL, and make normal variables with them.
 if (isset($_GET)) $dev = strtoupper($_GET["dev_mac"]);
