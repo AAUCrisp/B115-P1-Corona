@@ -6,7 +6,7 @@ if (isset($_GET)) $dev = strtoupper($_GET["dev_mac"]);
 if (isset($_GET)) $rssi = $_GET["rssi"];
 if (isset($_GET)) $anc = strtoupper($_GET["anchor"]);
 
-if (isset($dev && $rssi && $anc)) {
+if (isset($dev) && isset($rssi) && isset($anc)) {
   // Check if the device has already been seen
   $sql = "SELECT *
           FROM anchor_device
