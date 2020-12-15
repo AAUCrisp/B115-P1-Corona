@@ -51,7 +51,7 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
     $conn->close();
 
     $sql = "INSERT INTO anchor_device (anc_id, dev_id, rssi)
-            VALUES ( '$anchor', '$dev', '$rssi' )";
+            VALUES ( '$anc', '$dev', '$rssi' )";
   }
   var_dump($sql);
 
