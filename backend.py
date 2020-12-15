@@ -61,8 +61,12 @@ def program():
     # Create counter
     counter = 0
 
-    for x in myresult:
-        print(x)
+    for res in myresult:
+        dev_id = res['device_id']
+        if dev_id == res['device_id']:
+            print(res)
+
+            
 
     # For x in myresult:
     #     dev_id = x[0]
