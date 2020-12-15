@@ -18,7 +18,7 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
   $result = mysqli_query($conn, $sql);
 
   var_dump($result);
-  $fetch = mysqli_fetch_array($result);
+  $fetch = mysqli_fetch_all($result);
   echo "<br> Før DB Kald";
   var_dump($fetch);
   echo "Efter DB Kald <br>";
