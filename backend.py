@@ -1,6 +1,7 @@
 import numpy as np
 import math as ma
 import mysql.connector
+from time import sleep
 
 
 def findD(RSSI):
@@ -78,4 +79,6 @@ def program():
                 rssiArray = [0, 0, 0, 0]
                 counter = 0
 
-program()
+while (True):
+    program()
+    sleep(5)
