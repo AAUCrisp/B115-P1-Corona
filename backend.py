@@ -63,7 +63,7 @@ def program():
     for x in myresult:
         dev_id = x[0]
         if dev_id == x[0]:
-            anc_id = int(x[1])
+            anc_id = x[1]
             rssiArray[anc_id] = x[2]
             counter += 1
             rssiArray[0] = int(x[0])
