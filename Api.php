@@ -50,10 +50,10 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
       echo "Error: " . $sql . "<br>" . $conn->error;
     }
     // Done, close connection
-    $conn->close();
+    // $conn->close();
 
     $sql = "INSERT INTO anchor_device (anc_id, device_id, RSSI)
-            VALUES ( '$anc', '$dev', $rssi )";
+            VALUES ( '$anc', '$dev', $rssi)";
   }
   var_dump($sql);
 
