@@ -111,8 +111,8 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
                         while ($row = mysqli_fetch_assoc($result)){
                             echo "<tr>";
                             echo "<br>";
-                            echo"<td> $row[device.id]</td>";
-                            echo"<td> $row[Last_updated]</td>";
+                            echo"<td> $row[device_id]</td>";
+                            echo"<td> $row[last_updated]</td>";
                             echo"<td> $row[x]</td>";
                             echo"<td> $row[y]</td>";
                             echo "</tr>";
