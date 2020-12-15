@@ -12,7 +12,7 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
   // Check if the device has already been seen
   $sql = "SELECT *
           FROM anchor_device
-          WHERE dev_id = $dev";
+          WHERE device_id = $dev";
 
   $result = mysqli_query($conn, $sql);
 
@@ -28,7 +28,7 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
     if (in_array($anc, $fetch['anc_id'])) {
       $sql = "UPDATE anchor_device
       SET RSSI = '$rssi'
-      WHERE anc_id='$anc' AND dev_id = '$dev'";
+      WHERE anc_id='$anc' AND device_id = '$dev'";
     }
     // If first time from this anchor, insert instead of update
     else {
@@ -49,8 +49,6 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
     } else {
       echo "Error: " . $sql . "<br>" . $conn->error;
     }
-    // Done, close connection
-    // $conn->close();
 
     $sql = "INSERT INTO anchor_device (anc_id, device_id, RSSI)
             VALUES ( '$anc', '$dev', $rssi)";
