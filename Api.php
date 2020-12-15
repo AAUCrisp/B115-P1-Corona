@@ -12,7 +12,8 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
   // Check if the device has already been seen
   $sql = "SELECT *
           FROM anchor_device
-          WHERE device_id = $dev";
+          WHERE device_id = '$dev'";
+  var_dump($sql);
 
   $result = mysqli_query($conn, $sql);
 
@@ -33,7 +34,7 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
     // If first time from this anchor, insert instead of update
     else {
       $sql = "INSERT INTO anchor_device (anc_id, device_id, RSSI)
-              VALUES ($anc, $dev, $rssi)";
+              VALUES ('$anc', '$dev', $rssi)";
     }
   }
   // Otherwise insert newly seen device in database
