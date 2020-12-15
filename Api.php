@@ -6,49 +6,51 @@ if (isset($_GET)) $dev = strtoupper($_GET["dev_mac"]);
 if (isset($_GET)) $rssi = $_GET["rssi"];
 if (isset($_GET)) $anc = strtoupper($_GET["anchor"]);
 
-// Check if the device has already been seen
-$sql = "SELECT *
-        FROM anchor_device
-        WHERE dev_id = $dev";
+if (isset($dev && $rssi && $anc)) {
+  // Check if the device has already been seen
+  $sql = "SELECT *
+          FROM anchor_device
+          WHERE dev_id = $dev";
 
-$result = mysqli_query($conn, $sql);
+  $result = mysqli_query($conn, $sql);
 
-// If the device has already been seen
-if (mysqli_num_rows($result)) {
-  $fetch = mysqli_fetch_assoc($result)
+  // If the device has already been seen
+  if (mysqli_num_rows($result)) {
+    $fetch = mysqli_fetch_assoc($result);
 
-  var_dump($fetch);
+    var_dump($fetch);
 
-  // Make sure the device has already been seen from that anchor too
-  if (in_array($anc, $fetch['anc_id'])) {
-    $sql = "UPDATE anchor_device
-    SET RSSI = '$rssi'
-    WHERE anc_id='$anc' AND dev_id = '$dev'";
+    // Make sure the device has already been seen from that anchor too
+    if (in_array($anc, $fetch['anc_id'])) {
+      $sql = "UPDATE anchor_device
+      SET RSSI = '$rssi'
+      WHERE anc_id='$anc' AND dev_id = '$dev'";
+    }
+    // If first time from this anchor, insert instead of update
+    else {
+      $sql = "INSERT INTO anchor_device (anc_id, dev_id, RSSI)
+              VALUES ($anc, $dev, $rssi)";
+    }
   }
-  // If first time from this anchor, insert instead of update
+  // Otherwise insert newly seen device in database
   else {
-    $sql = "INSERT INTO anchor_device (anc_id, dev_id, RSSI)
-            VALUES ($anc, $dev, $rssi)";
+    $sql = "BEGIN;";
+    $sql .= "INSERT INTO device (id)
+            VALUES ('$dev');
+            INSERT INTO anchor_device (anc_id, dev_id, rssi)
+            VALUES ( '$anchor', '$dev', '$rssi' );
+            COMMIT;";
   }
-}
-// Otherwise insert newly seen device in database
-else {
-  $sql = "BEGIN;";
-  $sql .= "INSERT INTO device (id)
-          VALUES ('$dev');
-          INSERT INTO anchor_device (anc_id, dev_id, rssi)
-          VALUES ( '$anchor', '$dev', '$rssi' );
-          COMMIT;";
-}
-var_dump($sql);
+  var_dump($sql);
 
-// Insert whatever data into the database, that the conditions figured out
-if ($conn->query($sql) === TRUE) {
-  echo "Database updated successfully";
-} else {
-  echo "Error: " . $sql . "<br>" . $conn->error;
+  // Insert whatever data into the database, that the conditions figured out
+  if ($conn->query($sql) === TRUE) {
+    echo "Database updated successfully";
+  } else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+  }
+  // Done, close connection
+  $conn->close();
 }
-// Done, close connection
-$conn->close();
 
  ?>
