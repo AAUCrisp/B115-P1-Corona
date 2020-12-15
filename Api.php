@@ -32,7 +32,7 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
     }
     // If first time from this anchor, insert instead of update
     else {
-      $sql = "INSERT INTO anchor_device (anc_id, dev_id, RSSI)
+      $sql = "INSERT INTO anchor_device (anc_id, device_id, RSSI)
               VALUES ($anc, $dev, $rssi)";
     }
   }
@@ -52,7 +52,7 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
     // Done, close connection
     $conn->close();
 
-    $sql = "INSERT INTO anchor_device (anc_id, dev_id, rssi)
+    $sql = "INSERT INTO anchor_device (anc_id, device_id, RSSI)
             VALUES ( '$anc', '$dev', $rssi )";
   }
   var_dump($sql);
