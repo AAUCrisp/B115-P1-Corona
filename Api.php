@@ -36,12 +36,22 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
   }
   // Otherwise insert newly seen device in database
   else {
-    $sql = "BEGIN;";
-    $sql .= "INSERT INTO device (id)
-            VALUES ('$dev');
-            INSERT INTO anchor_device (anc_id, dev_id, rssi)
-            VALUES ( '$anchor', '$dev', '$rssi' );
-            COMMIT;";
+
+    $sql = "INSERT INTO device (id)
+            VALUES ('$dev')";
+
+    var_dump($sql);
+    // Insert whatever data into the database, that the conditions figured out
+    if ($conn->query($sql) === TRUE) {
+      echo "Database updated successfully";
+    } else {
+      echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+    // Done, close connection
+    $conn->close();
+
+    $sql = "INSERT INTO anchor_device (anc_id, dev_id, rssi)
+            VALUES ( '$anchor', '$dev', '$rssi' )";
   }
   var_dump($sql);
 
