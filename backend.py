@@ -46,11 +46,12 @@ def findPosition(id, RSSI1, RSSI2, RSSI3):
 def program():
     # Connect to MySQL database. Copied from https://www.w3schools.com/python/python_mysql_getstarted.asp
     mydb = mysql.connector.connect(
-        host="192.168.12.1",
+        # host="192.168.12.1",
+        host="198.168.1.170",
         user="back-end",
         password="heidiIsaHoe",
         database="maindb")
-    mycursor = mydb.cursor()
+    mycursor = mydb.cursor(dictionary=True)
     mycursor.execute("SELECT device_id, anc_id , RSSI FROM anchor_device ORDER BY device_id")
     myresult = mycursor.fetchall()
 
@@ -61,18 +62,21 @@ def program():
     counter = 0
 
     for x in myresult:
-        dev_id = x[0]
-        if dev_id == x[0]:
-            anc_id = x[1]
-            rssiArray[anc_id] = x[2]
-            counter += 1
-            rssiArray[0] = int(x[0])
-            if counter == 3:
-                c = findPosition(rssiArray[0], rssiArray[1], rssiArray[2], rssiArray[3])
-                val = (c[0], c[1], c[2], c[1], c[2])
-                mycursor.execute("INSERT INTO position (id, x, y) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE x=%s, y=%s", val)
-                mydb.commit()
-                rssiArray = [0, 0, 0, 0]
-                counter = 0
+        print(x)
+
+    # For x in myresult:
+    #     dev_id = x[0]
+    #     if dev_id == x[0]:
+    #         anc_id = int(x[1])
+    #         rssiArray[anc_id] = x[2]
+    #         counter += 1
+    #         rssiArray[0] = int(x[0])
+    #         if counter == 3:
+    #             c = findPosition(rssiArray[0], rssiArray[1], rssiArray[2], rssiArray[3])
+    #             val = (c[0], c[1], c[2], c[1], c[2])
+    #             mycursor.execute("INSERT INTO position (id, x, y) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE x=%s, y=%s", val)
+    #             mydb.commit()
+    #             rssiArray = [0, 0, 0, 0]
+    #             counter = 0
 
 program()
