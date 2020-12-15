@@ -1,6 +1,8 @@
 <?php  // Require the file, that makes the connection to the database
 require_once 'database.php';
 
+echo "FED PIK";
+
 // Check if the GET variables are set in the URL, and make normal variables with them.
 if (isset($_GET)) $dev = strtoupper($_GET["dev_mac"]);
 if (isset($_GET)) $rssi = $_GET["rssi"];
