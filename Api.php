@@ -29,7 +29,7 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
 
     var_dump(php_helper::in_multi_array($anc, $fetch));
     // Make sure the device has already been seen from that anchor too
-    if (in_array($anc, $fetch)) {
+    if (php_helper::in_multi_array($anc, $fetch)) {
       echo "<br> OPDATER ANKER! <br>";
       $sql = "UPDATE anchor_device
       SET RSSI = '$rssi'
