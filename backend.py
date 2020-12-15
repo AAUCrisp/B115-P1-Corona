@@ -4,29 +4,29 @@ import mysql.connector
 from time import sleep
 
 
-def findD(RSSI):
+def findD(RSSI,n = 2.4):
     # Find the difference between transmitted power and received power at unknown distance d
     Pl_d = 20.5 - RSSI
 
     # Find the difference between transmitter power and received power at known distance d_0 = 1 meter
-    Pl_d0 = 84.16667
+    Pl_d0 = (20.5) - (-56) 
     d0 = 1
 
     # Define the Path Loss Exponent n
-    n = 1.8
+    
 
     # Calculate and return distance d isolated from Log Distance Path Loss model
-    return ma.exp(((((Pl_d0 - Pl_d) * ma.log(10)) / (10 * n))) * d0)
+    return ma.exp(((((Pl_d - Pl_d0) * ma.log(10)) / (10 * n))) * d0)
 
 
 def findPosition(id, RSSI1, RSSI2, RSSI3):
     # X and Y coordinates of Anchor Points
-    x1 = -7.98
-    y1 = 3.74
-    x2 = 0.56
-    y2 = 3.54
-    x3 = -3.98
-    y3 = -2.5
+    x1 = 0
+    y1 = 0
+    x2 = 15
+    y2 = 0
+    x3 = 15
+    y3 = 10
 
     # Find the 3 radii
     r1 = findD(RSSI1)
