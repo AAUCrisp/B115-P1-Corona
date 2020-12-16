@@ -12,7 +12,8 @@ if (isset($_GET)) $anc = strtoupper($_GET["anchor"]);
 // ----- FUNCTION SECTION -----
 // -- Update Database Function --
 function db_update($stmt) {
-  echo "<br>SKRIV TIL DATABASE! <br>";
+  echo "<br>SKRIV TIL DATABASE! <br> Check DB variable INSIDE function<br>";
+  var_dump($conn);
   // Insert whatever data into the database, that the conditions figured out
   if ($conn->query($stme) === TRUE) {
     echo "Database updated successfully";
@@ -21,6 +22,8 @@ function db_update($stmt) {
   }
 }
 
+echo "<br>CHECK DB VARIABLE<br>";
+var_dump($conn);
 // ----- MAIN API SECTION -----
 // If the GET variables has been set, start the update
 if (isset($dev) && isset($rssi) && isset($anc)) {
