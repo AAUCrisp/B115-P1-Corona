@@ -121,6 +121,14 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
             <tbody>
 
                 <?php
+                $sql = "SELECT DISTINCT device.id AS device_id, device.Last_updated , position.x, position.y
+                        FROM device
+                        JOIN anchor_device
+                        ON anchor_device.device_id = device.id
+                        JOIN position
+                        ON anchor_device.device_id = position.id";
+                $result = mysqli_query($conn, $sql);        /* hentes data fra databasen, */
+                $numRows = mysqli_num_rows($result);    /* oprettes en variable, som er ligmed antal af rækker */
                     /* her hentes værdierne fra databasen og de bliver printet ud på hjemmesiden. */
                     if ($numRows > 0) {
                         while ($row = mysqli_fetch_assoc($result)){
