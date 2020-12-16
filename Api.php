@@ -11,12 +11,13 @@ if (isset($_GET)) $anc = strtoupper($_GET["anchor"]);
 
 // ----- FUNCTION SECTION -----
 // -- Update Database Function --
-function db_update($sql) {
+function db_update($stmt) {
+  echo "<br>SKRIV TIL DATABASE! <br>";
   // Insert whatever data into the database, that the conditions figured out
-  if ($conn->query($sql) === TRUE) {
+  if ($conn->query($stme) === TRUE) {
     echo "Database updated successfully";
   } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    echo "Error: " . $stmt . "<br>" . $conn->error;
   }
 }
 
