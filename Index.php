@@ -122,7 +122,7 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
 
                 <?php
                     /* her hentes værdierne fra databasen og de bliver printet ud på hjemmesiden. */
-                    if ($p_in_room > 0) {
+                    if ($numRows > 0) {
                         while ($row = mysqli_fetch_assoc($result)){
                             echo "<tr>";
                             echo "<br>";
