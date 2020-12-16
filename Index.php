@@ -75,28 +75,20 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
                 skal boxen på hjemmesiden være grøn. hvis den ikke er under 20, bliver den rød.
                 Burde nok trække det her tal ud fra databasen, fra en tabel som fortæller hvad rummet må */
 
-                $results = mysqli_fetch_all($result);
-
-                var_dump($results);
-
-
                 $p_in_room = 0;
 
-                for($i = 0; $i <= $numRows; $i++){
+                while($row = mysqli_fetch_assoc($result)){
                     $x_min = 0;
                     $x_max = 15;
                     $y_min = 0;
                     $y_max = 10;
-
-                    $device = $results[$i];
-
-                    if ($device['x'] >= $x_min && $device['x'] <= $x_max){
-                        if($device['y'] >= $y_min && $device['y'] <= $y_max){
+                    if ($row['x'] >= $x_min && $row['x'] <= $x_max){
+                        if($row['y'] >= $y_min && $row['y'] <= $y_max){
                             $p_in_room++;
                         }
                     }
-                    
                 }
+
 
                 if ($p_in_room < 20) {
                     $color = "green";
