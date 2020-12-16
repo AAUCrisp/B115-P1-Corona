@@ -4,7 +4,7 @@ $username = "back-end";
 $userpassword = "heidiIsaHoe";
 $dbname = "maindb";
 
-$conn = new mysqli($servername, $username, $userpassword,$dbname);
+global $conn = new mysqli($servername, $username, $userpassword,$dbname);
 
 
 
