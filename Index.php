@@ -111,7 +111,7 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
             Antallet af enheder er:
 
             <?php //print antal enheder
-                echo $resultCheck;
+                echo $p_in_room;
             ?>
         </h1>
 
@@ -130,7 +130,7 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
 
                 <?php
                     /* her hentes værdierne fra databasen og de bliver printet ud på hjemmesiden. */
-                    if ($resultCheck > 0) {
+                    if ($p_in_room > 0) {
                         while ($row = mysqli_fetch_assoc($result)){
                             echo "<tr>";
                             echo "<br>";
