@@ -11,7 +11,7 @@ if (isset($_GET)) $anc = strtoupper($_GET["anchor"]);
 
 // ----- FUNCTION SECTION -----
 // -- Update Database Function --
-function db_update($stmt) {
+function db_update($stmt, $conn) {
   echo "<br>SKRIV TIL DATABASE! <br> Check DB variable INSIDE function<br>";
   var_dump($conn);
   // Insert whatever data into the database, that the conditions figured out
@@ -45,7 +45,7 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
             VALUES ('$anc')";
     echo "<br> $sql <br>";
     // Insert Anchor
-    db_update($sql);
+    db_update($sql, $conn);
   }
 
 
@@ -89,14 +89,14 @@ if (isset($dev) && isset($rssi) && isset($anc)) {
 
     echo "<br> $sql <br>";
     // Insert device
-    db_update($sql);
+    db_update($sql, $conn);
 
     $sql = "INSERT INTO anchor_device (anc_id, device_id, RSSI)
             VALUES ( '$anc', '$dev', $rssi)";
   }
   echo "<br> $sql <br>";
   // Insert/Update Device
-  db_update($sql);
+  db_update($sql, $conn);
   // Done, close connection
   $conn->close();
 }
