@@ -1,11 +1,12 @@
 #include "parser.hpp"
 #include "structs.h"
 #include <Arduino.h>
+#include <HTTPClient.h>
 #include <WiFi.h>
 
 // Prototypes
 bool sendSelf();
-bool sendDevice(struct Device dev);
+void sendDevice(struct Device dev);
 
 /* Variables */
 char ssid[] = "B115-Test-Net";
@@ -21,11 +22,11 @@ void setup() {
   while (status != WL_CONNECTED) {
     Serial.println("Connecting to network");
     status = WiFi.begin(ssid, password);
-    delay(500);
+    delay(10000);
   }
 
-  while (!sendSelf()) {
-  }
+  // while (!sendSelf()) {
+  // }
 }
 
 void loop() {
@@ -34,14 +35,14 @@ void loop() {
 
   // device = parse_sec();
 
-  if (device.rssi != 0) {
+  if (device.rssi < 0 && device.rssi > -250) {
     sendDevice(device);
   }
 }
 
 bool sendSelf() {
   client.stop();
-  char req[] = "GET /api?anchor=%02X:%02X:%02X:%02X:%02X:%02X HTTP/1.1\n"
+  char req[] = "GET /api.php?anchor=%02X:%02X:%02X:%02X:%02X:%02X HTTP/1.1\n"
                "User-Agent: ArduinoWiFi/1.1\n"
                "Connection: close\n";
 
@@ -58,15 +59,13 @@ bool sendSelf() {
   }
 }
 
-bool sendDevice(struct Device dev) {
+bool sendDevice_bak(struct Device dev) {
   client.stop();
 
   char req[] = "GET "
-               "/api"
+               "/api.php"
                "?anchor=%02X:%02X:%02X:%02X:%02X:%02X&dev_mac=%02X:%"
-               "02X:%02X:%02X:%02X:%02X&rssi=%i HTTP/1.1\n"
-               "User-Agent: ArduinoWiFi/1.1\n"
-               "Connection: close\n";
+               "02X:%02X:%02X:%02X:%02X&rssi=%i HTTP/1.1";
 
   char buf[255];
 
@@ -76,9 +75,38 @@ bool sendDevice(struct Device dev) {
 
   if (client.connect(server_addr, 80)) {
     client.println(buf);
+    client.println("Host: 192.168.12.1\n");
+    client.println("Connection: close");
+    client.println();
     Serial.println("Device sent");
     return true;
   } else {
     return false;
+  }
+}
+
+void sendDevice(struct Device dev) {
+  String serverName = "http://192.168.12.1/api.php";
+  HTTPClient http;
+
+  char anchor[255];
+  sprintf(anchor, "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2],
+          mac[3], mac[4], mac[5]);
+
+  char dev_mac[255];
+  sprintf(dev_mac, "%02X:%02X:%02X:%02X:%02X:%02X", dev.dev_mac[0],
+          dev.dev_mac[1], dev.dev_mac[2], dev.dev_mac[3], dev.dev_mac[4],
+          dev.dev_mac[5]);
+
+  String serverPath = serverName + "?anchor=" + anchor + "&dev_mac=" + dev_mac +
+                      "&rssi=" + dev.rssi;
+
+  http.begin(serverPath.c_str());
+
+  int httpResponse = http.GET();
+
+  if (httpResponse > 0) {
+    Serial.print("HTTP Response code: ");
+    Serial.println(httpResponse);
   }
 }
