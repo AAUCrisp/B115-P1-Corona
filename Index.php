@@ -69,13 +69,28 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
                         JOIN position
                         ON anchor_device.device_id = position.id";
                 $result = mysqli_query($conn, $sql);        /* hentes data fra databasen, */
-                $resultCheck = mysqli_num_rows($result);    /* oprettes en variable, som er ligmed antal af rækker */
+                $numRows = mysqli_num_rows($result);    /* oprettes en variable, som er ligmed antal af rækker */
 
                 /* herunder opsættes et if statement. antallet af rækker = antal af enheder. hvis der er mindre end 20
                 skal boxen på hjemmesiden være grøn. hvis den ikke er under 20, bliver den rød.
-                Burde nok trække det her tal ud fra databasen, fra en tabel som fortæller hvad rummet må rumme */
+                Burde nok trække det her tal ud fra databasen, fra en tabel som fortæller hvad rummet må */
 
-                if ($resultCheck < 20) {
+                $p_in_room = 0;
+
+                while($row = mysqli_fetch_assoc($result)){
+                    $x_min = 0;
+                    $x_max = 15;
+                    $y_min = 0;
+                    $y_max = 10;
+                    if ($row['x'] >= $x_min && $row['x'] <= $x_max){
+                        if($row['y'] >= $y_min && $row['y'] <= $y_max){
+                            $p_in_room++;
+                        }
+                    }
+                }
+
+
+                if ($p_in_room < 20) {
                     $color = "green";
                 } else {
                     $color = "red";
@@ -88,7 +103,7 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
             Antallet af enheder er:
 
             <?php //print antal enheder
-                echo $resultCheck;
+                echo $p_in_room;
             ?>
         </h1>
 
@@ -106,15 +121,23 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
             <tbody>
 
                 <?php
+                $sql = "SELECT DISTINCT device.id AS device_id, device.Last_updated , position.x, position.y
+                        FROM device
+                        JOIN anchor_device
+                        ON anchor_device.device_id = device.id
+                        JOIN position
+                        ON anchor_device.device_id = position.id";
+                $result = mysqli_query($conn, $sql);        /* hentes data fra databasen, */
+                $numRows = mysqli_num_rows($result);    /* oprettes en variable, som er ligmed antal af rækker */
                     /* her hentes værdierne fra databasen og de bliver printet ud på hjemmesiden. */
-                    if ($resultCheck > 0) {
+                    if ($numRows > 0) {
                         while ($row = mysqli_fetch_assoc($result)){
                             echo "<tr>";
                             echo "<br>";
-                            echo"<td> $row[device_id]</td>";
-                            echo"<td> $row[Last_updated]</td>";
-                            echo"<td> $row[x]</td>";
-                            echo"<td> $row[y]</td>";
+                            echo"<td> " . $row['device_id'] . "</td>";
+                            echo"<td> " . $row['Last_updated'] . "</td>";
+                            echo"<td> " . $row['x'] . "</td>";
+                            echo"<td> " . $row['y'] . "</td>";
                             echo "</tr>";
                         }
                     } else {

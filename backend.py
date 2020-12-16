@@ -67,9 +67,9 @@ def program():
     for x in myresult:
         dev_id = x[0]
         if dev_id == x[0]:
-            anc_id = x[1]
-            rssiArray[1] = x[2]
             counter += 1
+            anc_id = x[1]
+            rssiArray[counter] = x[2]
             rssiArray[0] = x[0]
             if counter == 3:
                 c = findPosition(rssiArray[0], rssiArray[1], rssiArray[2], rssiArray[3])
