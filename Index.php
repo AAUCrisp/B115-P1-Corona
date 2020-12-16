@@ -88,7 +88,13 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
                     $y_min = 0;
                     $y_max = 10;
 
-                    //if ($results)
+                    $device = $results[$i];
+
+                    if ($device['x'] >= $x_min && $device['x'] <= $x_max){
+                        if($device['y'] >= $y_min && $device['y'] <= $y_max){
+                            $p_in_room++;
+                        }
+                    }
                     
                 }
 
