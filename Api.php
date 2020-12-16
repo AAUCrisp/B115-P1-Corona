@@ -15,7 +15,7 @@ function db_update($stmt, $conn) {
   echo "<br>SKRIV TIL DATABASE! <br> Check DB variable INSIDE function<br>";
   var_dump($conn);
   // Insert whatever data into the database, that the conditions figured out
-  if ($conn->query($stme) === TRUE) {
+  if ($conn->query($stmt) === TRUE) {
     echo "Database updated successfully";
   } else {
     echo "Error: " . $stmt . "<br>" . $conn->error;
