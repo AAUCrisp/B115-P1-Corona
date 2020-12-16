@@ -69,13 +69,30 @@ skal det være inde i et HTML tag: <html> alt der står herinde er kode til webs
                         JOIN position
                         ON anchor_device.device_id = position.id";
                 $result = mysqli_query($conn, $sql);        /* hentes data fra databasen, */
-                $resultCheck = mysqli_num_rows($result);    /* oprettes en variable, som er ligmed antal af rækker */
+                $numRows = mysqli_num_rows($result);    /* oprettes en variable, som er ligmed antal af rækker */
 
                 /* herunder opsættes et if statement. antallet af rækker = antal af enheder. hvis der er mindre end 20
                 skal boxen på hjemmesiden være grøn. hvis den ikke er under 20, bliver den rød.
-                Burde nok trække det her tal ud fra databasen, fra en tabel som fortæller hvad rummet må rumme */
+                Burde nok trække det her tal ud fra databasen, fra en tabel som fortæller hvad rummet må */
 
-                if ($resultCheck < 20) {
+                $results = mysqli_fetch_all($result);
+
+                var_dump($results);
+
+
+                $p_in_room = 0;
+
+                for($i = 0; $i <= $numRows; $i++){
+                    $x_min = 0;
+                    $x_max = 15;
+                    $y_min = 0;
+                    $y_max = 10;
+
+                    //if ($results)
+                    
+                }
+
+                if ($p_in_room < 20) {
                     $color = "green";
                 } else {
                     $color = "red";
