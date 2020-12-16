@@ -5,7 +5,6 @@
 #include <WiFi.h>
 
 // Prototypes
-bool sendSelf();
 void sendDevice(struct Device dev);
 
 /* Variables */
@@ -24,64 +23,14 @@ void setup() {
     status = WiFi.begin(ssid, password);
     delay(10000);
   }
-
-  // while (!sendSelf()) {
-  // }
 }
 
 void loop() {
   struct Device device;
   parse(&device);
 
-  // device = parse_sec();
-
   if (device.rssi < 0 && device.rssi > -250) {
     sendDevice(device);
-  }
-}
-
-bool sendSelf() {
-  client.stop();
-  char req[] = "GET /api.php?anchor=%02X:%02X:%02X:%02X:%02X:%02X HTTP/1.1\n"
-               "User-Agent: ArduinoWiFi/1.1\n"
-               "Connection: close\n";
-
-  char buf[255];
-
-  sprintf(buf, req, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-
-  if (client.connect(server_addr, 80)) {
-    client.println(buf);
-    Serial.println("Sensor sent");
-    return true;
-  } else {
-    return false;
-  }
-}
-
-bool sendDevice_bak(struct Device dev) {
-  client.stop();
-
-  char req[] = "GET "
-               "/api.php"
-               "?anchor=%02X:%02X:%02X:%02X:%02X:%02X&dev_mac=%02X:%"
-               "02X:%02X:%02X:%02X:%02X&rssi=%i HTTP/1.1";
-
-  char buf[255];
-
-  sprintf(buf, req, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
-          dev.dev_mac[0], dev.dev_mac[1], dev.dev_mac[2], dev.dev_mac[3],
-          dev.dev_mac[4], dev.dev_mac[5], dev.rssi);
-
-  if (client.connect(server_addr, 80)) {
-    client.println(buf);
-    client.println("Host: 192.168.12.1\n");
-    client.println("Connection: close");
-    client.println();
-    Serial.println("Device sent");
-    return true;
-  } else {
-    return false;
   }
 }
 
@@ -108,5 +57,7 @@ void sendDevice(struct Device dev) {
   if (httpResponse > 0) {
     Serial.print("HTTP Response code: ");
     Serial.println(httpResponse);
+    Serial.print("[QUERY] ");
+    Serial.println(serverPath);
   }
 }
