@@ -40,7 +40,7 @@ int register_beacon(beaconinfo beacon)
 
     if ((unsigned int) aps_known_count >=
         sizeof (aps_known) / sizeof (aps_known[0]) ) {
-      Serial.printf("exceeded max aps_known\n");
+      //Serial.printf("exceeded max aps_known\n");
       aps_known_count = 0;
     }
   }
@@ -64,14 +64,14 @@ int register_client(clientinfo ci)
 
     if ((unsigned int) clients_known_count >=
         sizeof (clients_known) / sizeof (clients_known[0]) ) {
-      Serial.printf("exceeded max clients_known\n");
+      //Serial.printf("exceeded max clients_known\n");
       clients_known_count = 0;
     }
   }
   return known;
 }
 
-void print_beacon(beaconinfo beacon)
+/*void print_beacon(beaconinfo beacon)
 {
   if (beacon.err != 0) {
     //Serial.printf("BEACON ERR: (%d)  ", beacon.err);
@@ -82,7 +82,7 @@ void print_beacon(beaconinfo beacon)
     Serial.printf("   %4d\r\n", beacon.rssi);
   }
 }
-
+*/
 void print_client(clientinfo ci)
 {
   int u = 0;
@@ -91,17 +91,19 @@ void print_client(clientinfo ci)
   if (ci.err != 0) {
     // nothing
   } else {
-    Serial.printf("DEVICE: ");
+   // Serial.printf("DEVICE: ");
     for (int i = 0; i < 6; i++) {
-      Serial.printf("%02x", ci.station[i]); //Printer mac-adressen!
+      Serial.printf("%02x ", ci.station[i]); //Printer mac-adressen!
      
     }
-    
-    Serial.printf(" ==> ");
-    
+    Serial.printf("%4d\n",ci.rssi);
     
     
-    for (u = 0; u < aps_known_count; u++)
+   // Serial.printf(" ==> ");
+    
+    
+    
+/*for (u = 0; u < aps_known_count; u++)
     {
       if (! memcmp(aps_known[u].bssid, ci.bssid, ETH_MAC_LEN)) {
         Serial.printf("[%32s]", aps_known[u].ssid);
@@ -112,13 +114,15 @@ void print_client(clientinfo ci)
 
     if (! known)  {
       Serial.printf("   Unknown/Malformed packet \r\n");
-      //  for (int i = 0; i < 6; i++) Serial.printf("%02x", ci.bssid[i]);
+       for (int i = 0; i < 6; i++) Serial.printf("%02x", ci.bssid[i]);
     } else {
-      Serial.printf("%2s", " ");
+     Serial.printf("%2s", " ");
       for (int i = 0; i < 6; i++) Serial.printf("%02x", ci.ap[i]);
       Serial.printf("  %3d", aps_known[u].channel);
-      Serial.printf("   %4d\r\n", ci.rssi); //Printer RSSI
+     Serial.printf("RSSI");
+     Serial.printf("    %4d\r\n",ci.rssi); //Printer RSSI
     }
+    */
   }
 }
 
@@ -132,7 +136,7 @@ void promisc_cb(uint8_t *buf, uint16_t len)
     struct sniffer_buf2 *sniffer = (struct sniffer_buf2*) buf;
     struct beaconinfo beacon = parse_beacon(sniffer->buf, 112, sniffer->rx_ctrl.rssi);
     if (register_beacon(beacon) == 0) {
-      print_beacon(beacon);
+      //print_beacon(beacon);
       nothing_new = 0;
     }
   } else {
@@ -141,7 +145,7 @@ void promisc_cb(uint8_t *buf, uint16_t len)
     if ((sniffer->buf[0] == 0x08) || (sniffer->buf[0] == 0x88)) {
       struct clientinfo ci = parse_data(sniffer->buf, 36, sniffer->rx_ctrl.rssi, sniffer->rx_ctrl.channel);
       if (memcmp(ci.bssid, ci.station, ETH_MAC_LEN)) {
-        if (register_client(ci) == 0) {
+       if (register_client(ci) == 0) {
           print_client(ci);
           nothing_new = 0;
         }
