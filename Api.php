@@ -5,9 +5,9 @@ require_once 'database.php';
 require_once 'php_helper.php';
 
 // Check if the GET variables are set in the URL --> make normal variables with them.
-if (isset($_GET)) $dev = strtoupper($_GET["dev_mac"]);
-if (isset($_GET)) $rssi = $_GET["rssi"];
-if (isset($_GET)) $anc = strtoupper($_GET["anchor"]);
+if (isset($_GET["dev_mac"])) $dev = strtoupper($_GET["dev_mac"]);
+if (isset($_GET["rssi"])) $rssi = $_GET["rssi"];
+if (isset($_GET["anchor"])) $anc = strtoupper($_GET["anchor"]);
 
 // ----- FUNCTION SECTION -----
 // -- Update Database Function --
